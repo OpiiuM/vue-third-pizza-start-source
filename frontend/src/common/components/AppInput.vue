@@ -1,5 +1,5 @@
 <template>
-	<label class="input">
+	<label class="input" :class="inputClass">
 		<span :class="labelClass">{{ label }}</span>
 
 		<input
@@ -41,19 +41,19 @@ export default defineComponent({
 		},
 	},
 
-	setup(props, context) {
-		console.log('context', context);
+	setup(props) {
+		const inputClass = computed(() => {
+			return props.modificators.map((mod) => `input--${mod}`);
+		});
 
 		const labelClass = computed(() => {
-			const cssClasses = props.modificators.map((mod) => `input--${mod}`);
-			
 			return {
 				'visually-hidden': props.labelHidden,
-				...cssClasses,
 			};
 		});
 
 		return {
+			inputClass,
 			labelClass,
 		};
 	},
