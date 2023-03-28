@@ -10,7 +10,7 @@
 			>
 				<app-drag
 					:data-transfer="ingredient"
-					:draggable="getValue(ingredient.value) < MAX_INGREDIENT_COUNT"
+					:draggable="values[ingredient.id] < MAX_INGREDIENT_COUNT"
 				>
 					<span
 						class="filling"
@@ -20,33 +20,11 @@
 					</span>
 				</app-drag>
 
-				<!-- CountPicker -->
-				<div class="counter counter--orange ingredients__counter">
-					<button
-						type="button"
-						class="counter__button counter__button--minus"
-						:disabled="getValue(ingredient) === 0"
-						@click="decrementValue(ingredient.value)"
-					>
-						<span class="visually-hidden">Меньше</span>
-					</button>
-					<input
-						type="text"
-						name="counter"
-						class="counter__input"
-						:value="getValue(ingredient.value)"
-						@input="inputValue(ingredient.value, $event.target.value)"
-					/>
-					<button
-						type="button"
-						class="counter__button counter__button--plus"
-						:disabled="getValue(ingredient.value) === MAX_INGREDIENT_COUNT"
-						@click="incrementValue(ingredient.value)"
-					>
-						<span class="visually-hidden">Больше</span>
-					</button>
-				</div>
-				<!-- /CountPicker -->
+				<app-counter
+					class="ingredients__counter"
+					:value="values[ingredient.id]"
+					@input="inputValue(ingredient.id, $event)"
+				/>
 			</li>
 		</ul>
 
@@ -57,6 +35,7 @@
 import { toRef } from 'vue';
 
 import AppDrag from '@/common/components/AppDrag.vue';
+import AppCounter from '@/common/components/AppCounter.vue';
 
 import { MAX_INGREDIENT_COUNT } from '@/common/constants';
 
@@ -80,14 +59,6 @@ const getValue = (ingredient) => {
 
 const setValue = (ingredient, count) => {
 	emit('update', ingredient, Number(count));
-};
-
-const decrementValue = (ingredient) => {
-	setValue(ingredient, getValue(ingredient) - 1);
-};
-
-const incrementValue = (ingredient) => {
-	setValue(ingredient, getValue(ingredient) + 1);
 };
 
 const inputValue = (ingredient, count) => {

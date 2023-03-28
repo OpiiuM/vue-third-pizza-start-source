@@ -4,7 +4,6 @@
 			<h2 class="title title--small sheet__title">Выберите размер</h2>
 
 			<div class="sheet__content diameter">
-				<!-- TODO: ConstructorRadioButton.vue -->
 				<label
 					v-for="size in items"
 					:key="size.id"
@@ -14,10 +13,10 @@
 					<input
 						type="radio"
 						name="diameter"
-						:value="size.value"
-						:checked="size.value === modelValue"
+						:value="size.id"
+						:checked="size.id === modelValue"
 						class="visually-hidden"
-						@input="$emit('update:modelValue', size.value)"
+						@input="$emit('update:modelValue', size.id)"
 					/>
 					<span>{{ size.name }}</span>
 				</label>
@@ -30,8 +29,8 @@
 <script setup>
 defineProps({
 	modelValue: {
-		type: String,
-		default: '',
+		type: Number,
+		required: true,
 	},
 	items: {
 		type: Array,
