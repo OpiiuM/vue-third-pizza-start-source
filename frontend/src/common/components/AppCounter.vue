@@ -16,6 +16,7 @@
 			name="counter"
 			class="counter__input"
 			:value="value"
+			disabled
 			@input="emit('input', Number($event.target.value))"
 		/>
 		<button
@@ -29,7 +30,7 @@
 	</div>
 </template>
 
-<script lang="ts" setup>
+<script setup>
 defineProps({
 	value: {
 		type: Number,

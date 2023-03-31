@@ -4,7 +4,6 @@
 			<h2 class="title title--small sheet__title">Выберите тесто</h2>
 
 			<div class="sheet__content dough">
-				<!-- TODO: ConstructorRadioButton.vue -->
 				<label
 					v-for="dough in items"
 					:key="dough.id"
@@ -14,10 +13,10 @@
 					<input
 						type="radio"
 						name="dough"
-						:value="dough.value"
-						:checked="dough.value === modelValue"
+						:value="dough.id"
+						:checked="dough.id === modelValue"
 						class="visually-hidden"
-						@input="$emit('update:modelValue', dough.value)"
+						@input="$emit('update:modelValue', dough.id)"
 					/>
 					<b>{{ dough.name }}</b>
 					<span>{{ dough.description }}</span>
@@ -31,8 +30,8 @@
 <script setup>
 defineProps({
 	modelValue: {
-		type: String,
-		default: '',
+		type: Number,
+		required: true,
 	},
 	items: {
 		type: Array,

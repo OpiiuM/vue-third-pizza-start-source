@@ -1,8 +1,6 @@
 <template>
-	<div>
-		<default-header />
-		<slot />
-	</div>
+	<default-header />
+	<slot />
 </template>
 
 <script setup>
