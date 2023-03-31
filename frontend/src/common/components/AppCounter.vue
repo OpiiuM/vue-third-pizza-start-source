@@ -16,6 +16,7 @@
 			name="counter"
 			class="counter__input"
 			:value="value"
+			disabled
 			@input="emit('input', Number($event.target.value))"
 		/>
 		<button

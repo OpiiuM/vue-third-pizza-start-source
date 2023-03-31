@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { useDataStore } from '@/stores/data';
+import { useDataStore } from '@/stores';
 
 import { ingredientsQuantity } from '@/common/helpers/ingredients-quantity';
 import { pizzaPrice } from '@/common/helpers/pizza-price';
@@ -38,12 +38,8 @@ export const usePizzaStore = defineStore('pizza', {
 					};
 				});
 		},
-		price: (state) => {
-			return pizzaPrice(state);
-		},
-		ingredientQuantites: (state) => {
-			return ingredientsQuantity(state);
-		},
+		price: (state) => pizzaPrice(state),
+		ingredientQuantities: (state) => ingredientsQuantity(state),
 	},
 	actions: {
 		setName(name) {
@@ -90,6 +86,7 @@ export const usePizzaStore = defineStore('pizza', {
 			 */
 			if (ingredientIdx === -1 && count > 0) {
 				this.addIngredient(ingredientId);
+				return;
 			} else if (ingredientIdx === -1) {
 				return;
 			}

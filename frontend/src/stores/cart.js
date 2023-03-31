@@ -43,9 +43,7 @@ export const useCartStore = defineStore('cart', {
 			return data.misc.map((misc) => {
 				return {
 					...misc,
-					quantity: state.misc.find(
-						(i) => (i.miscId === misc.id)?.quantity ?? 0,
-					),
+					quantity: state.misc.find((i) => i.miscId === misc.id)?.quantity ?? 0,
 				};
 			});
 		},

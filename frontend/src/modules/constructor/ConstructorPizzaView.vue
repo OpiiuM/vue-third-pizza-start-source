@@ -8,7 +8,7 @@
 			>
 				<div class="pizza__wrapper">
 					<div
-						v-for="item in pizzaIngredients"
+						v-for="item in ingredients"
 						:key="item.id"
 						class="pizza__filling"
 						:class="[

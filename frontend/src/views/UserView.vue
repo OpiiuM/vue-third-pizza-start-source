@@ -2,20 +2,14 @@
 	<sidebar-layout>
 		<template #sidebar>
 			<router-link
-				:to="{ name: 'orders' }"
+				v-for="(link, i) in userMenu"
+				:key="i"
+				:to="link.to"
 				class="layout__link"
 				active-class="layout__link--active"
 				exact-path
 			>
-				История заказов
-			</router-link>
-			<router-link
-				:to="{ name: 'profile' }"
-				class="layout__link"
-				active-class="layout__link--active"
-				exact-path
-			>
-				Мои данные
+				{{ link.label }}
 			</router-link>
 		</template>
 
@@ -30,6 +24,16 @@ import { useRoute } from 'vue-router';
 import SidebarLayout from '@/layouts/SidebarLayout.vue';
 
 const route = useRoute();
-
 const routeName = computed(() => route.name);
+
+const userMenu = [
+	{
+		to: { name: 'orders' },
+		label: 'История заказов',
+	},
+	{
+		to: { name: 'profile' },
+		label: 'Мои данные',
+	},
+];
 </script>

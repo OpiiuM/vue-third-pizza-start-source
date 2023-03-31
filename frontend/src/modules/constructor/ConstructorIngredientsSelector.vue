@@ -23,6 +23,8 @@
 				<app-counter
 					class="ingredients__counter"
 					:value="values[ingredient.id]"
+					:min="0"
+					:max="MAX_INGREDIENT_COUNT"
 					@input="inputValue(ingredient.id, $event)"
 				/>
 			</li>
@@ -32,8 +34,6 @@
 </template>
 
 <script setup>
-import { toRef } from 'vue';
-
 import AppDrag from '@/common/components/AppDrag.vue';
 import AppCounter from '@/common/components/AppCounter.vue';
 
@@ -51,11 +51,6 @@ const props = defineProps({
 });
 
 const emit = defineEmits(['update']);
-const values = toRef(props, 'values');
-
-const getValue = (ingredient) => {
-	return values.value[ingredient] ?? 0;
-};
 
 const setValue = (ingredient, count) => {
 	emit('update', ingredient, Number(count));

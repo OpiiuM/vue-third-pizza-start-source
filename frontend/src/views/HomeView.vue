@@ -4,9 +4,15 @@
 			<div class="content__wrapper">
 				<h1 class="title title--big">Конструктор пиццы</h1>
 
-				<dough-selector :items="dataStore.doughs" v-model="pizzaStore.doughId" />
+				<dough-selector
+					v-model="doughId"
+					:items="dataStore.doughs"
+				/>
 
-				<size-selector :items="dataStore.sizes" v-model="pizzaStore.sizeId" />
+				<size-selector
+					v-model="sizeId"
+					:items="dataStore.sizes"
+				/>
 
 				<div class="content__ingredients">
 					<div class="sheet">
@@ -14,12 +20,15 @@
 
 						<div class="sheet__content ingredients">
 
-							<sauce-selector :items="dataStore.sauces" v-model="pizzaStore.sauceId" />
+							<sauce-selector
+								v-model="sauceId"
+								:items="dataStore.sauces"
+							/>
 
 							<ingredients-selector
+								:values="pizzaStore.ingredientQuantities"
 								:items="dataStore.ingredients"
-								:values="pizzaStore.ingredients"
-								@update="pushIngredient"
+								@update="pizzaStore.setIngredientQuantity"
 							/>
 
 						</div>
@@ -27,27 +36,26 @@
 				</div>
 
 				<div class="content__pizza">
-					<label class="input">
-						<span class="visually-hidden">Название пиццы</span>
-						<input
-							v-model="pizza.name"
-							type="text"
-							name="pizza_name"
-							placeholder="Введите название пиццы"
-						/>
-					</label>
+					<app-input
+						v-model="name"
+						label="Название пиццы"
+						labelHidden
+						type="text"
+						name="pizza_name"
+						placeholder="Введите название пиццы"
+					/>
 
 					<pizza-view
-						:dough="pizza.dough"
-						:sauce="pizza.sauce"
-						:ingredients="pizza.ingredients"
-						@drop="addIngredient"
+						:dough="pizzaStore.dough.value"
+						:sauce="pizzaStore.sauce.value"
+						:ingredients="pizzaStore.ingredientsExtended"
+						@drop="pizzaStore.incrementIngredientQuantity"
 					/>
 
 					<div class="content__result">
-						<p>Итого: {{ price }} ₽</p>
+						<p>Итого: {{ pizzaStore.price }} ₽</p>
 						<button
-							type="submit"
+							type="button"
 							class="button"
 							:disabled="disableSubmit"
 							@click="addToCart"
@@ -63,40 +71,23 @@
 </template>
 
 <script setup>
-import { reactive, computed, onMounted } from 'vue';
+import { computed, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 
-import { useDataStore } from '@/stores/data';
-import { usePizzaStore } from '@/stores/pizza';
-import { useCartStore } from '@/stores/cart';
+import { useDataStore, usePizzaStore, useCartStore } from '@/stores';
 
+import AppInput from '@/common/components/AppInput.vue';
 import DoughSelector from '@/modules/constructor/ConstructorDoughSelector.vue';
 import SizeSelector from '@/modules/constructor/ConstructorSizeSelector.vue';
 import SauceSelector from '@/modules/constructor/ConstructorSauceSelector.vue';
 import IngredientsSelector from '@/modules/constructor/ConstructorIngredientsSelector.vue';
 import PizzaView from '@/modules/constructor/ConstructorPizzaView.vue';
 
-import doughJSON from '@/mocks/dough.json';
-import sizeJSON from '@/mocks/sizes.json';
-import sauceJSON from '@/mocks/sauces.json';
-import ingredientJSON from '@/mocks/ingredients.json';
-import {
-	normalizeDough,
-	normalizeSize,
-	normalizeSauces,
-	normalizeIngredients,
-} from '@/common/helpers/normalize';
-
 const router = useRouter();
 
 const dataStore = useDataStore();
 const pizzaStore = usePizzaStore();
 const cartStore = useCartStore();
-
-// const doughItems = doughJSON.map(normalizeDough);
-// const sizeItems = sizeJSON.map(normalizeSize);
-// const sauceItems = sauceJSON.map(normalizeSauces);
-// const ingredientItems = ingredientJSON.map(normalizeIngredients);
 
 const resetPizza = () => {
 	pizzaStore.setName('');
@@ -111,6 +102,12 @@ const addToCart = async () => {
 	await router.push({ name: 'cart' });
 	resetPizza();
 };
+
+onMounted(() => {
+	if (pizzaStore.index === null) {
+		resetPizza();
+	}
+});
 
 const name = computed({
 	get() {
@@ -148,21 +145,7 @@ const sauceId = computed({
 	},
 });
 
-onMounted(() => {
-	if (pizzaStore.index === null) {
-		resetPizza();
-	}
-});
-
 const disableSubmit = computed(() => {
 	return name.value.length === 0 || pizzaStore.price === 0;
 });
-
-const addIngredient = (key) => {
-	pizza.ingredients[key]++;
-};
-
-const pushIngredient = (key, count) => {
-	pizza.ingredients[key] = count;
-};
 </script>

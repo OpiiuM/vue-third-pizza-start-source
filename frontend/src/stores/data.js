@@ -4,7 +4,7 @@ import doughJSON from '@/mocks/dough.json';
 import ingredientsJSON from '@/mocks/ingredients.json';
 import saucesJSON from '@/mocks/sauces.json';
 import sizesJSON from '@/mocks/sizes.json';
-import miscJSON from '@/mocks/mosc.json';
+import miscJSON from '@/mocks/misc.json';
 import {
 	normalizeDough,
 	normalizeSize,
