@@ -7,16 +7,32 @@
 		<app-popup-title>Спасибо за заказ</app-popup-title>
 		<p>Мы начали готовить Ваш заказ, скоро привезем его вам ;)</p>
 
-		<app-popup-button>
+		<div class="popup__button">
 			<router-link :to="{ name: 'orders' }" class="button">
 				Отлично, я жду!
 			</router-link>
-		</app-popup-button>
+		</div>
 	</app-popup>	
 </template>
 
 <script setup>
+import { computed } from 'vue';
+import { useAuthStore } from '@/stores';
+
 import AppPopup from '@/common/components/popup/AppPopup.vue';
 import AppPopupTitle from '@/common/components/popup/AppPopupTitle.vue';
-import AppPopupButton from '@/commmon/components/popup/AppPopupButton.vue';
+
+const authStore = useAuthStore();
+
+const redirectRouteName = computed(() => {
+  authStore.isAuthenticated ? 'orders' : 'home';
+});
 </script>
+
+<style lang="scss" scoped>
+.popup__button {
+	& a {
+		padding: 16px 32px;
+	}
+}
+</style>

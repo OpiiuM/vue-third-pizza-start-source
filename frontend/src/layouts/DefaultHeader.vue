@@ -14,31 +14,45 @@
 			<router-link :to="{ name: 'cart' }">0 ₽</router-link>
 		</div>
 		<div class="header__user">
-			<router-link :to="{ name: 'profile' }">
-				<picture>
-					<source
-						type="image/webp"
-						srcset="
-						@/assets/img/users/user5.webp    1x,
-						@/assets/img/users/user5@2x.webp 2x
-						"
-					/>
-					<img
-						src="@/assets/img/users/user5.jpg"
-						srcset="@/assets/img/users/user5@2x.jpg"
-						alt="Василий Ложкин"
-						width="32"
-						height="32"
-					/>
-				</picture>
-				<span>Василий Ложкин</span>
+			<router-link v-if="authStore.isAuthenticated" :to="{ name: 'profile' }">
+        <img
+          :src="getPublicImage(authStore.user.avatar)"
+          :alt="authStore.user.name"
+          width="32"
+          height="32"
+        />
+				<span>{{ authStore.user.name }}</span>
 			</router-link>
-			<router-link :to="{ name: 'home' }" class="header__logout">
-				<span>Выйти</span>
+      <div
+        v-if="authStore.isAuthenticated"
+        class="header__logout"
+        @click="logout"
+      >
+        <span>Выйти</span>
+      </div>
+			<router-link
+        v-else
+        :to="{ name: 'login' }"
+        class="header__logout"
+      >
+				<span>Войти</span>
 			</router-link>
 		</div>
 	</header>
 </template>
 
 <script setup>
+import { useRouter } from 'vue-router';
+import { useAuthStore, useCartStore } from '@/stores';
+
+import { getPublicImage } from '@/common/helpers/public-image';
+
+const router = useRouter();
+const authStore = useAuthStore();
+const cartStore = useCartStore();
+
+const logout = async () => {
+  await authStore.logout();
+  await router.replace({ name: 'login' });
+};
 </script>

@@ -1,13 +1,49 @@
 <template>
   <app-layout>
-    <router-view />
+    <router-view v-if="isLoaded" />
   </app-layout>
 </template>
 
 <script setup>
-import { RouterView } from 'vue-router';
+import { onMounted, ref } from 'vue';
+import { RouterView, useRoute, useRouter } from 'vue-router';
+import { useAuthStore, useDataStore } from '@/stores';
+
+import JwtService from '@/services/jwt/jwt.service';
 
 import AppLayout from '@/layouts/AppLayout.vue';
+
+const dataStore = useDataStore();
+const route = useRoute();
+const router = useRouter();
+
+const isLoaded = ref(false);
+
+const checkLoggedIn = async () => {
+  const authStore = useAuthStore();
+  const token = JwtService.getToken();
+
+  if (!token) {
+    isLoaded.value = true;
+    return;
+  }
+
+  try {
+    await authStore.whoami();
+    const { redirect } = route.query;
+    await router.push(redirect ? redirect : { name: "home" });
+  } catch (e) {
+    JwtService.destroyToken();
+    console.error(e);
+  } finally {
+    isLoaded.value = true;
+  }
+};
+
+onMounted(() => {
+  checkLoggedIn();
+  dataStore.loadData();
+});
 </script>
 
 <style lang="scss">

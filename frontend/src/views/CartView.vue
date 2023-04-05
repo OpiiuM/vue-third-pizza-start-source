@@ -3,7 +3,7 @@
 		action="#"
 		method="post"
 		class="layout-form"
-		@submit="submit"
+		@submit.prevent="submit"
 	>
 		<main class="content cart">
 			<div class="container">
