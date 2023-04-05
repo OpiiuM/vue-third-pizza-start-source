@@ -1,3 +1,5 @@
+import isLoggedIn from '@/middlewares/isLoggenIn';
+
 export const routes = [
 	{
 		path: '/',
@@ -37,6 +39,7 @@ export const routes = [
 		component: () => import('@/views/UserView.vue'),
 		meta: {
 			layout: 'DefaultLayout',
+      middlewares: [isLoggedIn],
 		},
 		children: [
 			{

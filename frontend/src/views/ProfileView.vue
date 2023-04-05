@@ -4,138 +4,121 @@
 	</div>
 
 	<div class="user">
-		<picture>
-			<source
-				type="image/webp"
-				srcset="
-					@/assets/img/users/user5@2x.webp 1x,
-					@/assets/img/users/user5@4x.webp 2x
-				"
-			/>
-			<img
-				src="@/assets/img/users/user5@2x.jpg"
-				srcset="@/assets/img/users/user5@4x.jpg"
-				alt="Василий Ложкин"
-				width="72"
-				height="72"
-			/>
-		</picture>
+		<img
+      :src="getPublicImage(authStore.user.avatar)"
+      :alt="authStore.user.name"
+      width="72"
+      height="72"
+    />
 		<div class="user__name">
-			<span>Василий Ложкин</span>
+			<span>{{ authStore.user.name }}</span>
 		</div>
 		<p class="user__phone">
-			Контактный телефон: <span>+7 999-999-99-99</span>
+			Контактный телефон: <span>{{ authStore.user.phone }}</span>
 		</p>
 	</div>
 
 	<div class="layout__address">
-		<div class="sheet address-form">
-			<div class="address-form__header">
-				<b>Адрес №1. Тест</b>
-				<div class="address-form__edit">
-					<button type="button" class="icon">
-						<span class="visually-hidden">Изменить адрес</span>
-					</button>
-				</div>
-			</div>
-			<p>Невский пр., д. 22, кв. 46</p>
-			<small>Позвоните, пожалуйста, от проходной</small>
-		</div>
-	</div>
+    <address-card
+      v-for="(address, index) in profileStore.addresses"
+      :key="address.id"
+      :address="address"
+      :index="index + 1"
+      @delete="profileStore.removeAddress(address.id)"
+      @save="updateAddress(address, $event)"
+    />
+  </div>
 
-	<div class="layout__address">
-		<form action="test.html" method="post" class="address-form address-form--opened sheet">
-			<div class="address-form__header">
-				<b>Адрес №1</b>
-			</div>
+  <div v-if="!isNewAddressFormOpened" class="layout__button">
+    <button
+      type="button"
+      class="button button--border"
+      @click="isNewAddressFormOpened = true"
+    >
+      Добавить новый адрес
+    </button>
+  </div>
 
-			<div class="address-form__wrapper">
-				<div class="address-form__input">
-
-					<app-input
-						v-model="state.address"
-						label="Название адреса*"
-						type="text"
-						name="addr-name"
-						placeholder="Введите название адреса"
-						required
-					/>
-
-				</div>
-				<div class="address-form__input address-form__input--size--normal">
-
-					<app-input
-						v-model="state.street"
-						label="Улица*"
-						type="text"
-						name="addr-street"
-						placeholder="Введите название улицы"
-						required
-					/>
-
-				</div>
-				<div class="address-form__input address-form__input--size--small">
-
-					<app-input
-						v-model="state.house"
-						label="Дом*"
-						type="text"
-						name="addr-house"
-						placeholder="Введите номер дома"
-						required
-					/>
-
-				</div>
-				<div class="address-form__input address-form__input--size--small">
-
-					<app-input
-						v-model="state.apartment"
-						label="Квартира"
-						type="text"
-						name="addr-apartment"
-						placeholder="Введите № квартиры"
-					/>
-					
-				</div>
-				<div class="address-form__input">
-
-					<app-input
-						v-model="state.comment"
-						label="Комментарий"
-						type="text"
-						name="addr-comment"
-						placeholder="Введите комментарий"
-					/>
-
-				</div>
-			</div>
-
-			<div class="address-form__buttons">
-				<button type="button" class="button button--transparent">
-					Удалить
-				</button>
-				<button type="submit" class="button">Сохранить</button>
-			</div>
-		</form>
-	</div>
-
-	<div class="layout__button">
-		<button type="button" class="button button--border">
-			Добавить новый адрес
-		</button>
-	</div>
+  <div v-else class="layout__address">
+    <address-edit-form
+      title="Новый адрес"
+      @save="addAddress"
+      @delete="isNewAddressFormOpened = false"
+    />
+  </div>
 </template>
   
 <script setup>
-import { reactive } from 'vue';
+import { ref } from 'vue';
+import { useAuthStore, useProfileStore } from '@/stores/profile';
 
-import AppInput from '@/common/components/AppInput.vue';
+import AddressCard from '@/common/components/address/AddressCard.vue';
+import AddressEditForm from '@/common/components/address/AddressEditForm.vue';
 
-const state = reactive({
-	address: '',
-	street: '',
-	house: '',
-	apartment: '',
-	comment: '',
-});
+import { getPublicImage } from '@/common/helpers/public-image';
+
+const authStore = useAuthStore();
+const profileStore = useProfileStore();
+
+const isNewAddressFormOpened = ref(false);
+
+const addAddress = async (address) => {
+  await profileStore.addAddress(address);
+  isNewAddressFormOpened.value = false;
+};
+
+const updateAddress = (address, data) => {
+  profileStore.updateAddress({
+    ...address,
+    ...data,
+  });
+};
 </script>
+
+<style lang="scss" scoped>
+.layout__address {
+  :deep(.address-form) {
+    $bl: &;
+    
+    position: relative;
+    
+    padding-top: 0;
+    padding-bottom: 26px;
+    
+    p {
+      @include r-s16-h19;
+      
+      margin-top: 0;
+      margin-bottom: 16px;
+      padding: 0 16px;
+    }
+
+    small {
+      @include l-s11-h13;
+      
+      display: block;
+      
+      padding: 0 16px;
+    }
+  }
+
+  :deep(.address-form--opened) {
+    .address-form__header {
+      padding: 16px;
+    }
+  }
+
+  :deep(.address-form__header) {
+    @include b-s14-h16;
+    
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    
+    margin-bottom: 21px;
+    padding: 10px 16px;
+    
+    border-bottom: 1px solid rgba($green-500, 0.1);
+  }
+}
+</style>

@@ -1,3 +1,4 @@
+export { useAuthStore } from './auth';
 export { useDataStore } from './data';
 export { usePizzaStore } from './pizza';
 export { useCartStore } from './cart';
