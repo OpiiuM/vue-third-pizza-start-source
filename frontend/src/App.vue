@@ -1,6 +1,13 @@
 <template>
   <app-layout>
-    <router-view v-if="isLoaded" />
+    <router-view
+      v-if="isLoaded"
+      v-slot="{ Component }"
+    >
+      <transition name="slide" mode="out-in">
+        <component :is="Component" />
+      </transition>
+    </router-view>
   </app-layout>
 </template>
 

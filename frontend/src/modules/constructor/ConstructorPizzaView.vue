@@ -6,18 +6,20 @@
 				class="pizza"
 				:class="`pizza--foundation--${props.dough}-${props.sauce}`"
 			>
-				<div class="pizza__wrapper">
-					<div
-						v-for="item in ingredients"
-						:key="item.id"
-						class="pizza__filling"
-						:class="[
-							`pizza__filling--${item.value}`,
-							item.quantity === TWO_INGREDIENTS && 'pizza__filling--second',
-							item.quantity === THREE_INGREDIENTS && 'pizza__filling--third',
-						]"
-					/>
-				</div>
+        <div class="pizza__wrapper">
+          <transition-group name="scale">
+            <div
+              v-for="item in ingredients"
+              :key="item.id"
+              class="pizza__filling"
+              :class="[
+                `pizza__filling--${item.value}`,
+                item.quantity === TWO_INGREDIENTS && 'pizza__filling--second',
+                item.quantity === THREE_INGREDIENTS && 'pizza__filling--third',
+              ]"
+            />
+          </transition-group>
+        </div>
 			</div>
 
 		</app-drop>

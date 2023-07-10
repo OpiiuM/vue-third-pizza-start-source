@@ -67,13 +67,13 @@ export const useProfileStore = defineStore('profile', {
     },
     async loadOrders() {
       const res = await resources.order.getOrders();
-      if (res.__state === "success") {
+      if (res.__state === 'success') {
         this.setOrders(res.data);
       }
     },
     async removeOrder(orderId) {
       const res = await resources.order.removeOrder(orderId);
-      if (res.__state === "success") {
+      if (res.__state === 'success') {
         this.orders = this.orders.filter((i) => i.id !== orderId);
       }
     },
@@ -87,19 +87,19 @@ export const useProfileStore = defineStore('profile', {
         ...address,
         userId: authStore.user.id,
       });
-      if (res.__state === "success") {
+      if (res.__state === 'success') {
         this.addresses.push(res.data);
       }
     },
     async removeAddress(addressId) {
       const res = await resources.address.removeAddress(addressId);
-      if (res.__state === "success") {
+      if (res.__state === 'success') {
         this.addresses = this.addresses.filter((i) => i.id !== addressId);
       }
     },
     async updateAddress(address) {
       const res = await resources.address.updateAddress(address);
-      if (res.__state === "success") {
+      if (res.__state === 'success') {
         this.addresses = this.addresses.map((i) =>
           i.id === address.id ? address : i
         );

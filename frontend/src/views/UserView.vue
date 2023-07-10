@@ -23,16 +23,21 @@ import { useRoute } from 'vue-router';
 
 import SidebarLayout from '@/layouts/SidebarLayout.vue';
 
+// TODO: ??
 const route = useRoute();
 const routeName = computed(() => route.name);
 
 const userMenu = [
 	{
-		to: { name: 'orders' },
+		to: {
+      name: 'orders',
+    },
 		label: 'История заказов',
 	},
 	{
-		to: { name: 'profile' },
+		to: {
+      name: 'profile',
+    },
 		label: 'Мои данные',
 	},
 ];

@@ -72,7 +72,10 @@
 					</li>
 				</ul>
 
-				<div class="cart__additional">
+				<div
+          v-if="cartStore.pizzas.length > 0"
+          class="cart__additional"
+        >
 					<ul class="additional-list">
 						<li
 							v-for="misc in cartStore.miscExtended"
@@ -81,7 +84,7 @@
 						>
 							<p class="additional-list__description">
 								<img
-									:src="getImage(`${misc.image}.svg`)"
+									:src="getPublicImage(misc.image)"
 									width="39"
 									height="60"
 									:alt="misc.name"
@@ -105,7 +108,10 @@
 					</ul>
 				</div>
 
-				<div class="cart__form">
+				<div
+          v-if="cartStore.pizzas.length > 0"
+          class="cart__form"
+        >
 					<div class="cart-form">
 						<label class="cart-form__select">
 							<span class="cart-form__label">Получение заказа:</span>
@@ -170,7 +176,10 @@
 			</div>
 		</main>
 
-		<section class="footer">
+		<section
+      v-if="cartStore.pizzas.length > 0"
+      class="footer"
+    >
 			<div class="footer__more">
 				<router-link :to="{ name: 'home' }" class="button button--border button--arrow">
 					Хочу еще одну
@@ -206,6 +215,8 @@ import { useCartStore, usePizzaStore, useProfileStore } from '@/stores';
 
 import AppInput from '@/common/components/AppInput.vue';
 import AppCounter from '@/common/components/AppCounter.vue';
+
+import { getPublicImage } from '@/common/helpers/public-image';
 
 const router = useRouter();
 

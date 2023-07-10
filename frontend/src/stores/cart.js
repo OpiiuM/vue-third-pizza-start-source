@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { useDataStore, useAuthStore } from '@/stores/data';
+import { useDataStore, useAuthStore } from '@/stores';
 import resources from '@/services/resources';
 import { pizzaPrice } from '@/common/helpers/pizza-price';
 

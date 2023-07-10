@@ -1,4 +1,4 @@
-import isLoggedIn from '@/middlewares/isLoggenIn';
+import { isLoggedIn } from '@/middlewares/isLoggenIn';
 
 export const routes = [
 	{

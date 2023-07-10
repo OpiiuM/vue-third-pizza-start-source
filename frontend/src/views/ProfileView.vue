@@ -50,7 +50,7 @@
   
 <script setup>
 import { ref } from 'vue';
-import { useAuthStore, useProfileStore } from '@/stores/profile';
+import { useAuthStore, useProfileStore } from '@/stores';
 
 import AddressCard from '@/common/components/address/AddressCard.vue';
 import AddressEditForm from '@/common/components/address/AddressEditForm.vue';

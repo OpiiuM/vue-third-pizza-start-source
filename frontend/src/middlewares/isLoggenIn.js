@@ -1,6 +1,6 @@
 import { useAuthStore } from '@/stores';
 
-export const isLoggenIn = ({ to }) => {
+export const isLoggedIn = ({ to }) => {
   const authstore = useAuthStore();
 
   if (!authstore.isAuthenticated) {
